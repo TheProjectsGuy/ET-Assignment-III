@@ -34,8 +34,8 @@ void loadFonts() {
 void loadVariables() {
   //Loading the calibration Grapher
   calibrationCurve = new Graph(width * 1/13, height * 1/9, width * 18/19, height * 4/5);
-  calibrationCurve.setXAxis(-55, 110, 25);
-  calibrationCurve.setYAxis(0, 500, 20);
+  calibrationCurve.setXAxis(k_dc(298), 100, 25);
+  calibrationCurve.setYAxis(0, 3, 20);
   calibrationCurve.setTitle("Calibration Curve");
   calibrationCurve.xlabel = "Temperature (in ˚C)";
   calibrationCurve.ylabel = "Resistance (in kΩ)";

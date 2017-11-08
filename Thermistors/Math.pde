@@ -76,6 +76,7 @@ class Thermistor {  //Thermistor class and function
   }
 }
 
+
 class Thermistor_Graph extends Thermistor {  //To integrate Thermistor and Graph
   color graphColor = #ff0000;
   Thermistor_Graph() {

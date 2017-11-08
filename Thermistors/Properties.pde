@@ -12,7 +12,7 @@ static class Defaults {  //Defaults and Settings
     static float T_0 = 298;  //298 K
     static float R_1 = 200;  //R1 = 200 Ohms
     static float T_1 = 373;  //100 degree C, 373 K
-    static float alpha = 4013.474827;  //alpha (for thermistor = 4013.474827 K) for the given problem
+    static float alpha = 4013.474827;  //alpha (for thermistor = 4013.474827 K) for the given problem - calculated
   }
   static class Graph {
     static float precision = 0.001;

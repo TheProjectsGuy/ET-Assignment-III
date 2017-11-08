@@ -164,31 +164,27 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
       }
     }
   }
-  void make() {
+  void make() {  //Make the frame
     this.makeEssentials();  //Do the basic stuff
   }
-
-  void make(ArrayList<Thermistor_Graph> thermistors) {
-    make();  //First make the graph
+  //Make thermistor characteristic curves
+  void make(ArrayList<Thermistor_Graph> thermistors) {  //Plot the thermistor curves (Thermistors in an array list)
+    make();  //First make the graph frame
     for (Thermistor_Graph t : thermistors) {  //Plot points
       this.drawGraph(t);
     }
   }
-
-  void drawGraph(Thermistor_Graph tg) {
+  void drawGraph(Thermistor_Graph tg) {  //Plot a single thermistor graph
     stroke(tg.graphColor);
     for (float i = minX; i <= maxX; i+= Defaults.Graph.precision) {
       point(map_X2screen(i), map_Y2screen(tg.getResistance(i)/1000.0));
     }
   }
-
-  void drawGraph(Thermistor thermistorElement) {
+  void drawGraph(Thermistor thermistorElement) {  
     drawGraph(thermistorElement, color(255, 0, 0));
   }
-
   void drawGraph(Thermistor thermistorElement, color graphColor) {
-    Thermistor_Graph g = new Thermistor_Graph(thermistorElement, graphColor);
-    drawGraph(g);
+    drawGraph(new Thermistor_Graph(thermistorElement, graphColor));
   }
 }
 
