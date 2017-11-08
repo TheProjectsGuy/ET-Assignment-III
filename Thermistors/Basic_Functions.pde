@@ -21,12 +21,23 @@ float df_dc(float temperature_F) {
 //Bootup section
 void bootupFunction() {
   loadFonts();
+  loadVariables();
 }
 
 void loadFonts() {
-  
-//Grapher fonts
+
+  //Grapher fonts
   graphTitleFont = loadFont("AlBayan-Bold-48.vlw");
   graphAxisLabelFont = loadFont("AmericanTypewriter-Semibold-20.vlw");
-  graphGridLabelFont = loadFont("ArialMT-10");
+  graphGridLabelFont = loadFont("ArialMT-10.vlw");
+}
+void loadVariables() {
+  //Loading the calibration Grapher
+  calibrationCurve = new Graph(width * 1/13, height * 1/9, width * 18/19, height * 4/5);
+  calibrationCurve.setXAxis(-55, 110, 25);
+  calibrationCurve.setYAxis(0, 500, 20);
+  calibrationCurve.setTitle("Calibration Curve");
+  calibrationCurve.xlabel = "Temperature (in ˚C)";
+  calibrationCurve.ylabel = "Resistance (in kΩ)";
+  calibrationCurve.backgroundColor = color(255);
 }

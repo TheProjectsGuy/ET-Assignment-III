@@ -1,15 +1,15 @@
 Graph calibrationCurve;
-
+Thermistor t = new Thermistor();
+Thermistor_Graph tt = new Thermistor_Graph(t, color(0, 0, 255));
 void setup() {
   fullScreen();
   bootupFunction();
-  calibrationCurve = new Graph(width * 1/4, height * 1/4, width * 3/4, height * 3/4);
-  calibrationCurve.setGrid_X(2);
 }
 
 
 
 void draw() {
-  background(127);
+  background(255);
   calibrationCurve.make();
+  calibrationCurve.drawGraph(tt);
 }

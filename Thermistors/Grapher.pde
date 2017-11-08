@@ -3,45 +3,27 @@
 
 class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 to maxX)) (Y axis goes from (0 to maxY))
   float maxX = 10;  //Maximum X value : Temperatures
-  float minX = 0;
+  float minX = 7;
   float maxY = 10;  //Maximum Y value : Resistances
   float minY = 0;
 
-  float grid_X = 10;  //number of divisions on the X axis  
+  float grid_X = 20;  //number of divisions on the X axis  
   float grid_Y = 10;  //number of divisions on the Y axis  //Grid * Scale = Max_Value - Min_Value
-  float scale_X = 1;  //scale of the X axis
-  float scale_Y = 1;  //scale of the Y axis
-  void setScaleX(float newScale_X) {  //New scale for the X axis, keeping the same maxX
-    this.scale_X = newScale_X;
-    this.grid_X = (this.maxX - this.minX) / this.scale_X;
+  float getScaleX() {
+    return (maxX - minX) / grid_X;
   }
-  void setScaleY(float newScale_Y) {  //New scale for the Y axis, keeping the same maxY
-    this.scale_Y = newScale_Y;
-    this.grid_Y = (this.maxY - this.minY) / this.scale_Y;
+  float getScaleY() {
+    return (maxY - minY) / grid_Y;
   }
-  void setGrid_X(float newGrid_X) {  //New grid size for the X axis, adjust scale
-    this.grid_X = newGrid_X;
-    this.scale_X = (this.maxX - this.minX) / this.grid_X;
+  void setXAxis(float minX, float maxX, float grid) {
+    this.minX = minX;
+    this.maxX = maxX;
+    this.grid_X = grid;
   }
-  void setGrid_Y(float newGrid_Y) {  //new grid size for the Y axis, adjust scale
-    this.grid_Y = newGrid_Y;
-    this.scale_Y = (this.maxY - this.minY) / this.grid_Y;
-  }
-  void setMinX(float newMinX) {  //new minX, keeping the same scale for the X axis, change the grid
-    this.minX = newMinX;
-    this.grid_X = (this.maxX - this.minX) / this.scale_X;
-  }
-  void setMaxX(float newMaxX) {  //new maxX, keeping the same scale for the X axis, change the grid
-    this.maxX = newMaxX;
-    this.grid_X = (this.maxX - this.minX) / this.scale_X;
-  }
-  void setMinY(float newMinY) {  //new minY, keeping the same scale for the Y axis, change the grid
-    this.minY = newMinY;
-    this.grid_Y = (this.maxY - this.minY) / this.scale_Y;
-  }
-  void setMaxY(float newMaxY) {  //new maxY, keeping the same scale for the Y axis, change the grid
-    this.maxY = newMaxY;
-    this.grid_Y = (this.maxY - this.minY) / this.scale_Y;
+  void setYAxis(float minY, float maxY, float grid) {
+    this.minY = minY;
+    this.maxY = maxY;
+    this.grid_Y = grid;
   }
 
   //On screen specifications / on screen properties
@@ -122,7 +104,7 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
   color gridColor = color(0, 255, 0);
   float boundaryThickness = 1.2;
   //Make graph
-  void make() {  
+  void makeEssentials() {  
     //Make the background
     strokeWeight(0.15);
     fill(backgroundColor);
@@ -139,6 +121,7 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
     if (this.writeTitle) {
       //Write the title
       textSize(18);
+      fill(0, 0, 0);
       textFont(graphTitleFont);
       textAlign(CENTER, BOTTOM);
       text(title, this.getScreen_midX(), this.screen_minY);
@@ -147,21 +130,22 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
       //Make the grid on the axis
       stroke(gridColor);
       strokeWeight(0.2);
-      for (float i = this.minX; i < this.maxX; i+=this.scale_X) {  //X axis lines
+      for (float i = this.minX; i < this.maxX; i+=this.getScaleX()) {  //X axis lines
         line(map_X2screen(i), map_Y2screen(this.minY), map_X2screen(i), map_Y2screen(this.maxY));
       }
-      for (float j = this.minY; j < this.maxY; j+=this.scale_Y) {  //Y axis lines
+      for (float j = this.minY; j < this.maxY; j+=this.getScaleY()) {  //Y axis lines
         line(map_X2screen(this.minX), map_Y2screen(j), map_X2screen(this.maxX), map_Y2screen(j));
       }
     }
     if (this.writeAxisLabel) {
       textAlign(CENTER, TOP);
+      fill(0, 0, 0);
       textFont(graphAxisLabelFont, 30);
       text(xlabel, getScreen_midX(), screen_maxY + 30);
       //Write Y label vertically
       textAlign(CENTER, BOTTOM);
       pushMatrix();
-      translate(screen_minX - 30, getScreen_midY());
+      translate(screen_minX - 50, getScreen_midY());
       rotate(-HALF_PI);
       text(ylabel, 0, 0);
       popMatrix();
@@ -171,10 +155,40 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
       textSize(15);
       fill(0);
       textAlign(CENTER, TOP);
-      for (float i = minX; i <= maxX; i+= scale_X) {
-        text(i, map_X2screen(i), screen_maxY + 5);
+      for (float i = minX; i <= maxX; i+= getScaleX()) {
+        text(String.format("%.1f", i), map_X2screen(i), screen_maxY + 10);
+      }
+      textAlign(RIGHT, CENTER);
+      for (float j = minY; j <= maxY; j+= getScaleY()) {
+        text(String.format("%.1f", j), screen_minX - 5, map_Y2screen(j));
       }
     }
+  }
+  void make() {
+    this.makeEssentials();  //Do the basic stuff
+  }
+
+  void make(ArrayList<Thermistor_Graph> thermistors) {
+    make();  //First make the graph
+    for (Thermistor_Graph t : thermistors) {  //Plot points
+      this.drawGraph(t);
+    }
+  }
+
+  void drawGraph(Thermistor_Graph tg) {
+    stroke(tg.graphColor);
+    for (float i = minX; i <= maxX; i+= Defaults.Graph.precision) {
+      point(map_X2screen(i), map_Y2screen(tg.getResistance(i)/1000.0));
+    }
+  }
+
+  void drawGraph(Thermistor thermistorElement) {
+    drawGraph(thermistorElement, color(255, 0, 0));
+  }
+
+  void drawGraph(Thermistor thermistorElement, color graphColor) {
+    Thermistor_Graph g = new Thermistor_Graph(thermistorElement, graphColor);
+    drawGraph(g);
   }
 }
 

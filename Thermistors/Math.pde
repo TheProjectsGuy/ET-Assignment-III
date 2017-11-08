@@ -27,6 +27,12 @@ class Thermistor {  //Thermistor class and function
   Thermistor() {
   }
 
+  Thermistor(Thermistor t) {
+    this.alpha = t.alpha;
+    this.R_0 = t.R_0;
+    this.T_0 = t.T_0;
+  }
+
   Thermistor(float alpha, float R_0, float T_0) {
     this.setAlpha(alpha);
     this.setR_0(R_0);
@@ -57,11 +63,31 @@ class Thermistor {  //Thermistor class and function
     return alpha;
   }
 
-  float getResistance(float Temperature_K) {    
+  float getResistance_T_K(float Temperature_K) {    
     return R_0 * exp(alpha * (1.0/Temperature_K - 1.0/T_0));
+  }
+
+  float getResistance(float Temperature_C) {
+    return getResistance_T_K(dc_k(Temperature_C));
   }
 
   float getTemperature_K(float Resistance) {
     return 1.0/((log(Resistance / R_0) / alpha) + 1.0/T_0);
   }
 }
+
+class Thermistor_Graph extends Thermistor {  //To integrate Thermistor and Graph
+  color graphColor = #ff0000;
+  Thermistor_Graph() {
+  }
+  Thermistor_Graph(Thermistor t, color graphColor) {
+    super(t);
+    this.graphColor = graphColor;
+  }
+  Thermistor_Graph(Thermistor t) {
+    super(t);
+    this.graphColor = color(255, 0, 0);
+  }
+}
+
+ArrayList<Thermistor_Graph> thermistors;
