@@ -1,6 +1,6 @@
 
 
-
+// Grapher class
 class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 to maxX)) (Y axis goes from (0 to maxY))
   float maxX = 10;  //Maximum X value : Temperatures
   float minX = 7;

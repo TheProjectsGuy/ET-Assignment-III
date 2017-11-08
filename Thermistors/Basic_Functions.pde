@@ -32,10 +32,10 @@ void loadFonts() {
   graphGridLabelFont = loadFont("ArialMT-10.vlw");
 }
 void loadVariables() {
-  //Loading the calibration Grapher
+  //Loading the calibration Grapher : Grapher variable
   calibrationCurve = new Graph(width * 1/13, height * 1/9, width * 18/19, height * 4/5);
   calibrationCurve.setXAxis(k_dc(298), 100, 25);
-  calibrationCurve.setYAxis(0, 3, 20);
+  calibrationCurve.setYAxis(0.2, 3, 20);
   calibrationCurve.setTitle("Calibration Curve");
   calibrationCurve.xlabel = "Temperature (in ˚C)";
   calibrationCurve.ylabel = "Resistance (in kΩ)";
