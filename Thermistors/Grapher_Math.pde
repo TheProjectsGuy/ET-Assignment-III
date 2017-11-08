@@ -1,40 +1,3 @@
-//Temperature conversions
-//Kelvin <-> Celsius
-float k_dc(float temperature_K) {   
-  return temperature_K - 273.15;
-}
-float dc_k(float temperature_C) {
-  return temperature_C + 273.15;
-}
-//Fahrenheit <-> Celsius 
-float dc_df(float temperature_C) {
-  return ((temperature_C / 5.0) * 9.0 + 32);
-}
-float df_dc(float temperature_F) {
-  return (temperature_F - 32) * 5.0 / 9.0;
-}
-
-//R = Ro exp[ a (1/T - 1/To) ]
-
-static class Defaults {  //Defaults and Settings
-  static class Point {  //Point class
-    static float X = 0;
-    static float Y = 0;  //X and Y
-    static color pointColor = #00ff00;  //Point Colour
-    static float pointDiameter = 2;  //Point Diameter
-  }
-  static class Thermistor {  //Thermistor class
-    static float R_0 = 3000;  //3000 Ohms
-    static float T_0 = 298;  //298 K
-    static float R_1 = 200;  //R1 = 200 Ohms
-    static float T_1 = 373;  //100 degree C, 373 K
-    static float alpha = 4013.474827;  //alpha (for thermistor = 4013.474827 K) for the given problem
-  }
-  static class Graph {
-    static float precision = 0.001;
-  }
-}
-
 class Thermistor {  //Thermistor class and function
   float alpha = Defaults.Thermistor.alpha;
   float R_0 = Defaults.Thermistor.R_0;
@@ -129,6 +92,23 @@ class Graph {
   //On screen specifications
   float screen_minX, screen_maxX;
   float screen_minY, screen_maxY;
+  //Graph Constructor
+  Graph(float minX, float minY, float maxX, float maxY) {  //Specify the top left and bottom right corner of the graph window
+    this.screen_minX = minX;
+    this.screen_maxX = maxX;
+    this.screen_minY = minY;
+    this.screen_maxY = maxY;
+  }
+  //Mid points
+  float getScreen_midX() {
+    return (this.screen_minX + this.screen_maxX) / 2;
+  }
+  float getScreen_midY() {
+    return (this.screen_minY + this.screen_maxY) / 2;
+  }
+  Point getScreen_mid() {
+    return new Point(this.getScreen_midX(), this.getScreen_midY());
+  }
   void setScreen_minX(float newValue) {
     this.screen_minX = newValue;
   }
@@ -141,12 +121,12 @@ class Graph {
   void setScreen_maxY(float newValue) {
     this.screen_maxY = newValue;
   }
-  void setScreen_midX(float newValue) {
+  void setScreen_midX(float newValue) {  //Preserve width and change the X coordinate of center
     float w = this.screen_maxX - this.screen_minX;
     this.setScreen_minX(newValue - w/2);
     this.setScreen_maxX(newValue + w/2);
   }
-  void setScreen_midY(float newValue) {
+  void setScreen_midY(float newValue) { //Preserve height and change the Y coordinate of center
     float h = this.screen_maxY - this.screen_minY;
     this.setScreen_minY(newValue - h/2);
     this.setScreen_maxY(newValue + h/2);
@@ -154,14 +134,53 @@ class Graph {
   void setCenterTo(Point pointOnScreen) {
     this.setCenterTo(pointOnScreen.X, pointOnScreen.Y);
   }
-  void setCenterTo(float newX, float newY) {
+  void setCenterTo(float newX, float newY) {  //Change the center of graph view
     this.setScreen_midX(newX);
     this.setScreen_midY(newY);
   }
+  float map_X2screen(float X_value) {
+    return map(X_value, 0, maxX, this.screen_minX, this.screen_maxX);
+  }
 
-  boolean makeBoundaries = true, makeGrid = true, writeTitle = false, writeAxisLabel = false;
+  boolean makeBoundaries = true, makeGrid = true, writeTitle = false, writeAxisLabel = false, writeGrid_Xaxis = true, writeGrid_Yaxis = true;
   String title = "", xlabel = "", ylabel = "";
-  void make() {  //Make graph
-    
+  color backgroundColor = #ffffff;
+  void setBackgroundColor(color newColor) {
+    this.backgroundColor = newColor;
+  }
+  void setTitle(String newTitle) {
+    this.title = newTitle;
+  }
+  color boundaryColor = color(255, 0, 0);
+  float boundaryThickness = 1.2;
+  //Make graph
+  void make() {  
+    //Make the background
+    strokeWeight(0.15);
+    fill(backgroundColor);
+    stroke(0, 255, 0);
+    rect(screen_minX, screen_minY, screen_maxX, screen_maxY);  
+    if (this.makeBoundaries) {
+      //Make the boundaries
+      rectMode(CORNERS);
+      stroke(boundaryColor);
+      strokeWeight(boundaryThickness);
+      rect(screen_minX, screen_minY, screen_maxX, screen_maxY);
+    }
+    if (this.writeTitle) {
+      //Write the title
+      textSize(18);
+      textFont(graphTitleFont);
+      textAlign(CENTER, BOTTOM);
+      text(title, this.getScreen_midX(), this.screen_minY);
+    }
+    if (this.makeGrid) {
+      //Make the grid on the axis
+      for (float i = 1; i < this.grid_X; i ++) {
+        line(this.screen_minX + i * scale_X, this.screen_minY, this.screen_minX + i * scale_X, this.screen_maxY);
+      }
+    }
   }
 }
+
+PFont graphTitleFont;
