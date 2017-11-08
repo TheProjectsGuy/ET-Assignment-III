@@ -110,7 +110,7 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
 
   //Grapher properties
   boolean makeBoundaries = true, makeGrid = true, writeTitle = true, writeAxisLabel = true, writeGrid = true;
-  String title = "Title", xlabel = "X", ylabel = "Y";
+  String title = "Title", xlabel = "X axis", ylabel = "Y axis";
   color backgroundColor = #ffffff;
   void setBackgroundColor(color newColor) {
     this.backgroundColor = newColor;
@@ -156,12 +156,26 @@ class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 t
     }
     if (this.writeAxisLabel) {
       textAlign(CENTER, TOP);
-      textFont(graphAxisLabelFont, 40);
-      text(xlabel, getScreen_midX(), screen_maxY + 20);
+      textFont(graphAxisLabelFont, 30);
+      text(xlabel, getScreen_midX(), screen_maxY + 30);
       //Write Y label vertically
+      textAlign(CENTER, BOTTOM);
+      pushMatrix();
+      translate(screen_minX - 30, getScreen_midY());
+      rotate(-HALF_PI);
+      text(ylabel, 0, 0);
+      popMatrix();
     }
-    
+    if (this.writeGrid) {
+      textFont(graphGridLabelFont);
+      textSize(15);
+      fill(0);
+      textAlign(CENTER, TOP);
+      for (float i = minX; i <= maxX; i+= scale_X) {
+        text(i, map_X2screen(i), screen_maxY + 5);
+      }
+    }
   }
 }
 
-PFont graphTitleFont, graphAxisLabelFont;
+PFont graphTitleFont, graphAxisLabelFont, graphGridLabelFont;

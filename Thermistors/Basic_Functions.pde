@@ -27,6 +27,6 @@ void loadFonts() {
   
 //Grapher fonts
   graphTitleFont = loadFont("AlBayan-Bold-48.vlw");
-  graphAxisLabelFont = loadFont("AmericanTypewriter-CondensedLight-48.vlw");
-
+  graphAxisLabelFont = loadFont("AmericanTypewriter-Semibold-20.vlw");
+  graphGridLabelFont = loadFont("ArialMT-10");
 }
