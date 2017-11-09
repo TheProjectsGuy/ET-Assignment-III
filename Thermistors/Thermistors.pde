@@ -1,7 +1,6 @@
-Graph calibrationCurve;
-//Testing variables
-Thermistor t = new Thermistor();
-Thermistor_Graph tt = new Thermistor_Graph(t, color(0, 0, 255));
+String CURRENT_SCREEN = "Introduction Screen".toUpperCase();
+String CURRENT_VIEW = "Homepage".toUpperCase();
+
 
 void setup() {
   fullScreen();
@@ -11,7 +10,26 @@ void setup() {
 
 
 void draw() {
-  background(255);
-  calibrationCurve.make();
-  calibrationCurve.drawGraph(tt);  //Draw the curve
+  switch(CURRENT_SCREEN) {
+  case "INTRODUCTION SCREEN":
+    Introduction_Screen_Handler();
+    break;
+  case "GRAPHER SCREEN":
+    Grapher_Screen_Handler();
+    break;
+  }
+  //Essential buttons
+  makeEssentialButtons();  //The close button and the importat menu items, the code is there in Basic_Functions
+}
+
+
+void keyPressed() {
+  switch(CURRENT_SCREEN) {
+  case "INTRODUCTION SCREEN":
+    Introduction_Screen_keyPressed();
+    break;
+  case "GRAPHER SCREEN":
+    Grapher_Screen_keyPressed();
+    break;
+  }
 }

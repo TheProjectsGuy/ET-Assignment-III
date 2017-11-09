@@ -8,6 +8,9 @@ public class MathematicalException extends Exception {
   }
 }
 
+//Testing variables
+Thermistor t = new Thermistor();
+
 //R = Ro exp[ a (1/T - 1/To) ]
 
 class Thermistor {  //Thermistor class and function
@@ -33,7 +36,7 @@ class Thermistor {  //Thermistor class and function
     this.T_0 = t.T_0;
   }
 
-  Thermistor(float alpha, float R_0, float T_0) {
+  Thermistor(float alpha, float R_0, float T_0) {  //alpha in K^-1
     this.setAlpha(alpha);
     this.setR_0(R_0);
     this.setT_0(T_0);
@@ -47,6 +50,7 @@ class Thermistor {  //Thermistor class and function
       throw new MathematicalException("Error : " + e.getMessage());
     }
   }
+  
   float calculateAlpha(float R_1, float T_1_K, float R_0, float T_0_K) throws MathematicalException {
     if (R_1 == R_0 || T_1_K == T_0_K) {
       throw new MathematicalException("Data error : (R,T) : (" + str(R_1) + "," + str(T_1_K) + ") ; (" + str(R_0) + "," + str(T_0_K) + ")");
@@ -73,6 +77,9 @@ class Thermistor {  //Thermistor class and function
 
   float getTemperature_K(float Resistance) {
     return 1.0/((log(Resistance / R_0) / alpha) + 1.0/T_0);
+  }
+  float getTemperature(float Resistance) {
+    return k_dc(getTemperature_K(Resistance));
   }
 }
 

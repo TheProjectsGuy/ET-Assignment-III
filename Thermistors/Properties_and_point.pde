@@ -15,7 +15,7 @@ static class Defaults {  //Defaults and Settings
     static float alpha = 4013.474827;  //alpha (for thermistor = 4013.474827 K) for the given problem - calculated
   }
   static class Graph {
-    static float precision = 0.001;
+    static float precision = 0.01;
     static float minTemperature_default_C = -55 + 273.15;
     static float maxTemperature_default_C = 114 + 273.15;
   }
