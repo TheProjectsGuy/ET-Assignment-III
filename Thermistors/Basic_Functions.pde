@@ -22,6 +22,35 @@ float df_dc(float temperature_F) {
 void bootupFunction() {
   loadFonts();
   loadVariables();
+  loadThermistorDatabase();
+}
+
+void loadThermistorDatabase() {
+  println("Loading Database");
+    //thermistors.add(new Thermistor_Graph_Database());
+    Table database = loadTable("data/Thermistor Database/Thermistor-Database.csv", "header");
+    for (TableRow t : database.rows()) {
+      println(t.getString(0) + " Found");
+      Thermistor row = new Thermistor();  
+      row.setNameTo(t.getString(0));
+      row.setAlpha(t.getFloat(1));
+      row.setR_0(t.getFloat(2));
+      row.setT_0(t.getFloat(3));
+      row.Band_10uA = t.getFloat(4);
+      row.Band_100uA = t.getFloat(5);
+      row.ResistanceTolerance = t.getFloat(6);
+      if (row.Band_100uA > max_100uA_band) {
+        max_100uA_band = row.Band_100uA;
+      }
+      if (row.Band_10uA > max_10uA_band) {
+        max_10uA_band = row.Band_10uA;
+      }
+      if (row.ResistanceTolerance < min_resistanceTolerance) {
+        min_resistanceTolerance = row.ResistanceTolerance;
+      }
+      thermistors.add(row);
+    }
+  println("100uA : " + max_100uA_band + ", 10uA : " + max_10uA_band + ", Minimum Tolerance : " + min_resistanceTolerance + " out of " + thermistors.size());
 }
 
 void loadFonts() {
@@ -36,8 +65,8 @@ void loadFonts() {
 void loadVariables() {
   //Loading the calibration Grapher : Grapher variable
   defautThermistorCalibrationCurve = new Graph(width * 1/13, height * 1/9, width * 18/19, height * 4/5);
-  defautThermistorCalibrationCurve.setXAxis(k_dc(298), 100, 25);
-  defautThermistorCalibrationCurve.setYAxis(0, 3, 20);
+  defautThermistorCalibrationCurve.setXAxis(k_dc(297), 100, 25);
+  defautThermistorCalibrationCurve.setYAxis(0, 3.2, 20);
   defautThermistorCalibrationCurve.setTitle("Default Thermistor Calibration Curve");
   defautThermistorCalibrationCurve.xlabel = "Temperature (in ˚C)";
   defautThermistorCalibrationCurve.ylabel = "Resistance (in kΩ)";
@@ -65,7 +94,7 @@ void Make_HomeButton() {
     homeIcon_button = loadImage("data/Images/Basic Icons/Home_Button_unhovered.png");
   }
   imageMode(CORNER);
-  image(homeIcon_button, 30,0,25,25);
+  image(homeIcon_button, 30, 0, 25, 25);
 }
 
 PImage closeIcon_button;  //25 BY 25

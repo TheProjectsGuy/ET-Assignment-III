@@ -20,6 +20,9 @@ void draw() {
   case "THERMISTOR ANALYZER":
     Thermistor_Analyzer_Handler();
     break;
+  case "TEMPERATURE DATABASE":
+    Temperature_Database_Handler();
+    break;
   }
   //Essential buttons
   makeEssentialButtons();  //The close button and the importat menu items, the code is there in Basic_Functions
@@ -36,6 +39,9 @@ void keyPressed() {
     break;
   case "THERMISTOR ANALYZER":
     Thermistor_Analyzer_keyPressed();
+    break;
+  case "TEMPERATURE DATABASE":
+    Temperature_Database_keyPressed();
     break;
   }
 }

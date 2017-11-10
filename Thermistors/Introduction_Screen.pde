@@ -21,6 +21,22 @@ void MakeHomepageButtons() {
   Make_Info_Calibration_Curve_Button();  //The info button
 
   Make_Thermistor_Analyzer_Button();
+
+  Make_Thermistor_Database_Button();
+}
+
+PImage Thermistor_Database_Icon;  
+void Make_Thermistor_Database_Button() {  //124 by 50
+  if (mouseX <= width/2 + 124/2.0 && mouseX >= width/2 - 124/2.0 && mouseY <= height/2 + 50/2.0 - 150 && mouseY >= height/2 - 50/2.0 - 150) {
+    Thermistor_Database_Icon = loadImage("data/Images/Introduction Screen/Database_hovered.png");
+    if (mousePressed) {
+      doCommand("Screen.TEMPERATURE_DATABASE.Select_thermistor_loader");  // ;-> "Temperature Database"."Select Thermistor loader"
+    }
+  } else {
+    Thermistor_Database_Icon = loadImage("data/Images/Introduction Screen/Database_unhovered.png");
+  }
+  imageMode(CENTER);
+  image(Thermistor_Database_Icon, width/2, height/2 - 150);
 }
 
 PImage ThermistorAnalyzerIcon_Button;
@@ -40,6 +56,18 @@ void Make_Thermistor_Analyzer_Button() {
 void MakeLinkButtons() {
   MakeWikipediaIcon_Button();
   MakeHTMLLinkIcon_Button();
+  MakePDFLinkIcon_Button();
+}
+
+String PDFLink = "https://www.omega.com/temperature/Z/pdf/z256-257.pdf";
+PImage PDFLink_Icon;
+void MakePDFLinkIcon_Button() {
+  PDFLink_Icon = loadImage("data/Images/Introduction Screen/PDF_Database_Icon.png");
+  if (mouseX <= width * 0.95 - 120 + 50 && mouseX >= width * 0.95 - 120 && mouseY <= height * 6/7 + 50 && mouseY >= height * 6/7 && mousePressed) {
+    doCommand("OPENLINK." + PDFLink);
+  }
+  imageMode(CORNER);
+  image(PDFLink_Icon, width * 0.95 - 120, height * 6/7, 50, 50);
 }
 
 String HTMLLink = "https://www.teamwavelength.com/info/thermistors.php";

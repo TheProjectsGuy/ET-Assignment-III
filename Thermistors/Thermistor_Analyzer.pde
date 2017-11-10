@@ -57,7 +57,7 @@ void DisplayResults_Thermistor_Analyzer() {
 }
 
 void makeEssentialButtons_Thermistor_Analyzer() {
-  if (!CURRENT_VIEW.equals("RESULT PAGE")) {
+  if (CURRENT_VIEW.equals("FORM VIEW")) {
     makeSubmitAndClearButtons_ThermistorAnalyzer();
   } else {
     makeBackButton_ThermistorAnalyzer();
