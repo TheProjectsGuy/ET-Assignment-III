@@ -17,6 +17,9 @@ void draw() {
   case "GRAPHER SCREEN":
     Grapher_Screen_Handler();
     break;
+  case "THERMISTOR ANALYZER":
+    Thermistor_Analyzer_Handler();
+    break;
   }
   //Essential buttons
   makeEssentialButtons();  //The close button and the importat menu items, the code is there in Basic_Functions
@@ -30,6 +33,9 @@ void keyPressed() {
     break;
   case "GRAPHER SCREEN":
     Grapher_Screen_keyPressed();
+    break;
+  case "THERMISTOR ANALYZER":
+    Thermistor_Analyzer_keyPressed();
     break;
   }
 }

@@ -1,4 +1,6 @@
 //CURRENT_SCREEN = GRAPHER SCREEN
+
+//CURRENT_SCREEN = GRAPHER SCREEN
 Thermistor_Graph default_Thermistor = new Thermistor_Graph(new Thermistor(), color(0, 0, 0));
 
 void Grapher_Screen_Handler() {
@@ -9,32 +11,42 @@ void Grapher_Screen_Handler() {
   case "DEFAULT GRAPH PLOTTER":  //Shouldn't go out of this... Must be accessed from within this file only
     PlotPointsOnTheDefaultsGraph();
     break;
+  case "DEFAULT GRAPH INFO":
+    MakeDefaultThermistorInfo();
+    break;
   }
+}
+
+
+
+void MakeDefaultThermistorInfo() {
+  background(255);
+  
 }
 
 void MakeDefaultGraph() {
   background(255);
-  calibrationCurve.make();
-  if (!calibrationCurve.mouseModeTurnedOn) {
+  defautThermistorCalibrationCurve.make();
+  if (!defautThermistorCalibrationCurve.mouseModeTurnedOn) {
     CURRENT_VIEW = "DEFAULT GRAPH PLOTTER";
   } else {
     PlotPointsOnTheDefaultsGraph();
-    calibrationCurve.makeMouseTracker(default_Thermistor);
+    defautThermistorCalibrationCurve.makeMouseTracker(default_Thermistor);
   }
 }
 
 void PlotPointsOnTheDefaultsGraph() {
-  calibrationCurve.drawGraph(default_Thermistor);
-  if (calibrationCurve.mouseModeTurnedOn) {
+  defautThermistorCalibrationCurve.drawGraph(default_Thermistor);
+  if (defautThermistorCalibrationCurve.mouseModeTurnedOn) {
     CURRENT_VIEW = "DEFAULT GRAPH";
   }
 }
 
 void Grapher_Screen_keyPressed() {
   if (key == 's' || key == 'S') {
-    calibrationCurve.turnOnMouseMode();
+    defautThermistorCalibrationCurve.turnOnMouseMode();
   } else if (key == 'h' || key == 'H') {
-    calibrationCurve.turnOffMouseMode();
+    defautThermistorCalibrationCurve.turnOffMouseMode();
   }
 }
 
@@ -42,7 +54,7 @@ void Grapher_Screen_keyPressed() {
 
 
 
-Graph calibrationCurve;
+Graph defautThermistorCalibrationCurve;
 
 // Grapher class
 class Graph {  //X axis temperature and Y axis resistance (X axis goes from (0 to maxX)) (Y axis goes from (0 to maxY))
